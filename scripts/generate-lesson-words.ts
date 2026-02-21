@@ -2,8 +2,8 @@ import fs from "fs";
 import path from "path";
 
 import { LESSON_WORD_RANGES } from "../app/content/lessonWordRanges";
-import { type LessonId } from "../app/models/lesson";
-import { type TranslationKey } from "../app/models/word";
+import { type LessonId } from "../app/models/lesson.model";
+import { type TranslationKey } from "../app/models/word.model";
 
 const WORDS_JSON_PATH = path.resolve("app/locales/en/words.json");
 const OUTPUT_PATH = path.resolve("app/content/lessonWords.generated.ts");
@@ -25,9 +25,7 @@ for (const [lessonIdRaw, range] of Object.entries(LESSON_WORD_RANGES)) {
   const slice = allKeys.slice(startIndex, startIndex + wordCount);
 
   if (slice.length !== wordCount) {
-    throw new Error(
-      `Lesson ${lessonId}: expected ${wordCount} words, got ${slice.length}`,
-    );
+    throw new Error(`Lesson ${lessonId}: expected ${wordCount} words, got ${slice.length}`);
   }
 
   lessonWords[lessonId] = slice;
