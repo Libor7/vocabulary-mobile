@@ -4,6 +4,12 @@ import { ACTION_TYPES, type UserState } from "./user.types";
 
 export const userReducer = (state: UserState, { payload, type }: UserAction): UserState => {
   switch (type) {
+    case ACTION_TYPES.BOOTSTRAP_USERS:
+      return {
+        ...state,
+        users: payload.users,
+      };
+
     case ACTION_TYPES.CREATE_USER:
       return {
         ...state,
@@ -49,8 +55,10 @@ export const userReducer = (state: UserState, { payload, type }: UserAction): Us
           courses: updateCourse(user.courses, payload.courseId, (course) =>
             updateWord(course, payload.wordId, (word) => ({
               ...word,
-              correctlyAnswered: payload.isCorrect,
-              attemptsLeft: decrementAttempts(word.attemptsLeft),
+              correctlyAnswered: payload.isCorrect || word.correctlyAnswered,
+              attemptsLeft: payload.isCorrect
+                ? word.attemptsLeft
+                : decrementAttempts(word.attemptsLeft),
             })),
           ),
         })),
@@ -61,12 +69,16 @@ export const userReducer = (state: UserState, { payload, type }: UserAction): Us
         ...state,
         users: updateUser(state.users, payload.userId, (user) => ({
           ...user,
-          courses: updateCourse(user.courses, payload.courseId, (course) =>
-            updateWord(course, payload.wordId, (word) => ({
-              ...word,
-              markedForReview: !word.markedForReview,
-            })),
-          ),
+          courses: updateCourse(user.courses, payload.courseId, (course) => {
+            const exists = course.markedForReview.includes(payload.wordId);
+
+            return {
+              ...course,
+              markedForReview: exists
+                ? course.markedForReview.filter((id) => id !== payload.wordId)
+                : [...course.markedForReview, payload.wordId],
+            };
+          }),
         })),
       };
 

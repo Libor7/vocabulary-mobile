@@ -6,6 +6,7 @@ export type UserState = {
 };
 
 export const ACTION_TYPES = {
+  BOOTSTRAP_USERS: "BOOTSTRAP_USERS",
   CREATE_USER: "CREATE_USER",
   SELECT_USER: "SELECT_USER",
   DELETE_USER: "DELETE_USER",

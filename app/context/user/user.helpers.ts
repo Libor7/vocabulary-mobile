@@ -1,4 +1,4 @@
-import type { Course, CourseId } from "@/app/models/course.model";
+import type { Course, CourseId, WordProgress } from "@/app/models/course.model";
 import type { User, UserId } from "@/app/models/user.model";
 import type { TranslationKey } from "@/app/models/word.model";
 
@@ -21,17 +21,21 @@ export const updateCourse = (
 export const updateWord = (
   course: Course,
   wordId: TranslationKey,
-  updater: (word: Course["words"][TranslationKey]) => Course["words"][TranslationKey],
+  updater: (word: WordProgress) => WordProgress,
 ): Course => {
-  const currentWord = course.words[wordId];
+  if (!course.progress) return course;
 
+  const currentWord = course.progress.words[wordId];
   if (!currentWord) return course;
 
   return {
     ...course,
-    words: {
-      ...course.words,
-      [wordId]: updater(currentWord),
+    progress: {
+      ...course.progress,
+      words: {
+        ...course.progress.words,
+        [wordId]: updater(currentWord),
+      },
     },
   };
 };

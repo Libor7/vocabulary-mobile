@@ -4,17 +4,21 @@ import { type TranslationKey } from "./word.model";
 
 export type CourseId = string; // crypto.randomUUID()
 
-export interface WordState {
-  attemptsLeft: number;
-  correctlyAnswered: boolean;
-  markedForReview: boolean;
-}
-
 export interface Course {
   id: CourseId;
   language: LanguageCode;
+  markedForReview: TranslationKey[];
+  progress: LessonProgress | null;
   score: number;
-  activeLesson: LessonId;
-  words: Record<TranslationKey, WordState>;
   createdAt: number;
+}
+
+export interface LessonProgress {
+  activeLesson: LessonId;
+  words: Record<TranslationKey, WordProgress>;
+}
+
+export interface WordProgress {
+  attemptsLeft: number;
+  correctlyAnswered: boolean;
 }

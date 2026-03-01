@@ -3,18 +3,19 @@ import type { User, UserId } from "@/app/models/user.model";
 import type { TranslationKey } from "@/app/models/word.model";
 import { ACTION_TYPES } from "./user.types";
 
+export type BootstrapUsersAction = {
+  type: typeof ACTION_TYPES.BOOTSTRAP_USERS;
+  payload: { users: User[] };
+};
+
 export type CreateUserAction = {
   type: typeof ACTION_TYPES.CREATE_USER;
-  payload: {
-    user: User;
-  };
+  payload: { user: User };
 };
 
 export type SelectUserAction = {
   type: typeof ACTION_TYPES.SELECT_USER;
-  payload: {
-    userId: UserId;
-  };
+  payload: { userId: UserId };
 };
 
 export type DeleteUserAction = {
@@ -43,6 +44,7 @@ export type ToggleReviewAction = {
 };
 
 export type UserAction =
+  | BootstrapUsersAction
   | CreateUserAction
   | SelectUserAction
   | DeleteUserAction
